@@ -17,8 +17,8 @@
 	</properties>
 
 	<dependencyManagement>
+
 		<dependencies>
-			<!--spring boot 2.2.2 -->
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
@@ -26,15 +26,13 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<!--spring cloud Hoxton.SR1 -->
-			<!-- <dependency>
+			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
 				<version>Hoxton.SR1</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			spring cloud alibaba 2.1.0.RELEASE
 			<dependency>
 				<groupId>com.alibaba.cloud</groupId>
 				<artifactId>spring-cloud-alibaba-dependencies</artifactId>
@@ -42,37 +40,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<dependency>
-				<groupId>mysql</groupId>
-				<artifactId>mysql-connector-java</artifactId>
-				<version>${mysql.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.alibaba</groupId>
-				<artifactId>druid</artifactId>
-				<version>${druid.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.mybatis.spring.boot</groupId>
-				<artifactId>mybatis-spring-boot-starter</artifactId>
-				<version>${mybatis.spring.boot.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>${junit.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>log4j</groupId>
-				<artifactId>log4j</artifactId>
-				<version>${log4j.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.projectlombok</groupId>
-				<artifactId>lombok</artifactId>
-				<version>${lombok.version}</version>
-				<optional>true</optional>
-			</dependency> -->
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
@@ -82,5 +49,7 @@
 		<module>jacob_swagger</module>
 		<module>jacob_spring_constructor</module>
 		<module>jacob_lombok</module>
+		<module>jacob_spring_apollo</module>
+		<module>jacob_spring_log</module>
 	</modules>
 </project>
