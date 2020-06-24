@@ -14,7 +14,6 @@ public class ICommandLineRunner3 implements CommandLineRunner {
 
 	public void run(String... args) throws Exception {
 		log.info("=========init 执行了================{}", this.getClass().getName());
-
 	}
 
 }
