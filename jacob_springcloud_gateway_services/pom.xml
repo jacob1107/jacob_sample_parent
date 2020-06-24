@@ -7,40 +7,37 @@
 		<artifactId>jacob_sample_parent</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<artifactId>jacob_spring_sentinel</artifactId>
-	<name>jacob_spring_sentinel</name>
+	<artifactId>jacob_springcloud_gateway_services</artifactId>
+	<name>jacob_springcloud_gateway_services</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
+		<!--gateway -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-gateway</artifactId>
+		</dependency>
+		<!--eureka-client -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
 
-		<!--SpringCloud ailibaba sentinel -->
-		<dependency>
-			<groupId>com.alibaba.cloud</groupId>
-			<artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
-		</dependency>
-		<!-- SpringBoot整合Web组件+actuator -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
-		<!--日常通用jar包配置 -->
+		<!--一般基础配置类 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+
 	</dependencies>
+
 </project>
