@@ -56,6 +56,8 @@
 		<module>jacob_springcloud_gateway_services</module>
 		<module>jacob_springcloud_gateway_client</module>
     <module>jacob_sample_common</module>
+    <module>jacob_spring_catch</module>
+    <module>jacob_spring_trycatch</module>
   </modules>
 	<build>
 		<plugins>
