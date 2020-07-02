@@ -1,30 +1,38 @@
 package org.jacob.spring.sentinel.controller;
 
-import org.jacob.spring.sentinel.ex.HandlerException;
+import org.jacob.spring.sentinel.handler.IBlockHandler;
+import org.jacob.spring.sentinel.handler.IFallbackClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 
 @RestController
 public class HelloController {
 
-	@RequestMapping("/helloworld3")
-	@SentinelResource(value = "helloworld3", blockHandler = "helloworld3Handler")
-	public String helloworld3() {
+	private static final Logger log = LoggerFactory.getLogger(HelloController.class);
 
+	@SuppressWarnings("unused")
+	@RequestMapping("/helloworld3")
+	@SentinelResource(value = "helloworld3", blockHandler = "ihelloworld3Handler", blockHandlerClass = IBlockHandler.class, fallbackClass = IFallbackClass.class, fallback = "fallbackHandler")
+	// @SentinelResource(value = "helloworld3", fallbackClass =
+	// IFallbackClass.class, fallback = "fallbackHandler")
+	public String helloworld3(String name, String sex) {
+
+		int i = 1 / 0;
 		try {
-			Thread.sleep(10000);
+			Thread.sleep(50000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		return "hello Sentinel333 !";
+		return String.valueOf(Math.random());
 	}
 
 	public static String helloworld3Handler(BlockException ex) {
 
-		System.out.println("Oops: " + ex.getClass().getCanonicalName());
+		log.info("Oops: " + ex.getClass().getCanonicalName());
 		return "系统限流了111....";
 	}
 }
