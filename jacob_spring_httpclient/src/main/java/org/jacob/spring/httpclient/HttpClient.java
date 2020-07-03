@@ -25,7 +25,7 @@ import com.alibaba.fastjson.JSON;
 public class HttpClient {
 
 	public static void main(String[] args) throws Exception {
-		for (int i = 0; i < 2000; i++) {
+		for (int i = 0; i < 700; i++) {
 			new Thread(new Runnable() {
 
 				@Override
@@ -39,7 +39,7 @@ public class HttpClient {
 	}
 
 	private static void httpClient() {
-		getString();
+		// getString();
 		post();
 
 	}
@@ -50,7 +50,7 @@ public class HttpClient {
 	 * 就是http请求的三个阶段，一：建立连接；二：数据传送；三，断开连接。超时后会ConnectionTimeOutException
 	 * socketTimeout：指客户端从服务器读取数据的timeout，超出后会抛出SocketTimeOutException
 	 */
-	private static void getString() {
+	protected static void getString() {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 
 		RequestConfig requestConfig = setrequestConfig();
@@ -78,13 +78,13 @@ public class HttpClient {
 
 	}
 
-	private static RequestConfig setrequestConfig() {
+	protected static RequestConfig setrequestConfig() {
 		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(1000).setConnectTimeout(1000)
 				.setConnectionRequestTimeout(1000).build();
 		return requestConfig;
 	}
 
-	public static void getString2() {
+	protected static void getString2() {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 
 		RequestConfig requestConfig = setrequestConfig();
@@ -124,16 +124,18 @@ public class HttpClient {
 
 	}
 
-	private static void post() {
+	protected static void post() {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
-		RequestConfig requestConfig = setrequestConfig();
-		HttpPost httpPost = new HttpPost("http://127.0.0.1:8081/helloworld3");
+		// RequestConfig requestConfig = setrequestConfig();
+		HttpPost httpPost = new HttpPost("http://127.0.0.1:8081/say");
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-		nvps.add(new BasicNameValuePair("username", "vip"));
-		nvps.add(new BasicNameValuePair("password", "secret"));
+		nvps.add(new BasicNameValuePair("servName", "app"));
+		nvps.add(new BasicNameValuePair("name", "age"));
+		nvps.add(new BasicNameValuePair("sex", "sex"));
+		nvps.add(new BasicNameValuePair("age", "1"));
 		CloseableHttpResponse response = null;
 		try {
-			httpPost.setConfig(requestConfig);
+			// httpPost.setConfig(requestConfig);
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
 			response = httpclient.execute(httpPost);
 			System.out.println(response.getStatusLine());

@@ -1,0 +1,7 @@
+[
+	{
+		"limitApp": "app",
+		"resource": "say",
+		"strategy": 1
+	}
+]

@@ -1,0 +1,26 @@
+[
+	{
+		"burstCount": 19,
+		"clusterMode": false,
+		"controlBehavior": 12,
+		"count": 4.0,
+		"durationInSec": 5,
+		"grade": 1,
+		"limitApp": "default",
+		"maxQueueingTimeMs": 23,
+		"paramFlowItemList": [
+			{
+				"classType": "java.lang.String",
+				"count": 7,
+				"object": "sex"
+			},
+			{
+				"classType": "int",
+				"count": 6,
+				"object": "age"
+			}
+		],
+		"paramIdx": 1,
+		"resource": "say"
+	}
+]

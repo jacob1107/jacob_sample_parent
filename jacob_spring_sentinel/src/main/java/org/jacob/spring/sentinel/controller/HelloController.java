@@ -14,16 +14,15 @@ public class HelloController {
 
 	private static final Logger log = LoggerFactory.getLogger(HelloController.class);
 
-	@SuppressWarnings("unused")
-	@RequestMapping("/helloworld3")
-	@SentinelResource(value = "helloworld3", blockHandler = "ihelloworld3Handler", blockHandlerClass = IBlockHandler.class, fallbackClass = IFallbackClass.class, fallback = "fallbackHandler")
+	@RequestMapping("/say")
+	@SentinelResource(value = "say", blockHandler = "iblockhandler", blockHandlerClass = IBlockHandler.class, fallbackClass = IFallbackClass.class, fallback = "fallbackHandler")
 	// @SentinelResource(value = "helloworld3", fallbackClass =
 	// IFallbackClass.class, fallback = "fallbackHandler")
-	public String helloworld3(String name, String sex) {
+	public String helloworld3(String name, String sex,int age) {
 
-		int i = 1 / 0;
+		// int i = 1 / 0;
 		try {
-			Thread.sleep(50000);
+			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

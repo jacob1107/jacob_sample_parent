@@ -7,7 +7,7 @@ public class IFallbackClass {
 
 	private static final Logger log = LoggerFactory.getLogger(IFallbackClass.class);
 
-	public static String fallbackHandler(String name, String sex) {
+	public static String fallbackHandler(String name, String sex, int age) {
 		log.info("Oops: ....IFallbackClass 方法");
 		return "....IFallbackClass 方法";
 	}

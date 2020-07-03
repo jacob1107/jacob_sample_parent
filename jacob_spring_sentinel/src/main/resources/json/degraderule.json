@@ -1,0 +1,10 @@
+[
+	{
+		"count": 1.0,
+		"grade": 0,
+		"limitApp": "default",
+		"passCount": 0,
+		"resource": "say",
+		"timeWindow": 1
+	}
+]

@@ -1,10 +1,10 @@
 [
 	{
 		"resource": "say",
-		"limitApp": "default",
-		"controlBehavior": 1,
+		"controlBehavior": 2,
 		"count": 5,
 		"grade": 1,
+		"limitApp": "default",
 		"strategy": 0
 	}
 ]
