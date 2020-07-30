@@ -45,6 +45,7 @@ public class HttpClient {
 	}
 
 	/**
+	 * HttpClinet 一定要设置成单例
 	 * connectionRequestTimout：指从连接池获取连接的timeout
 	 * connetionTimeout：指客户端和服务器建立连接的timeout，
 	 * 就是http请求的三个阶段，一：建立连接；二：数据传送；三，断开连接。超时后会ConnectionTimeOutException
