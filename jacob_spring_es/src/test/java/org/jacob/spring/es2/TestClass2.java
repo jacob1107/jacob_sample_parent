@@ -1,17 +1,14 @@
 package org.jacob.spring.es2;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Resource;
 
-import org.elasticsearch.action.admin.indices.alias.get.GetAliasesRequest;
-import org.elasticsearch.client.GetAliasesResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.cluster.metadata.AliasMetaData;
+import org.elasticsearch.client.indices.GetIndexRequest;
+import org.elasticsearch.client.indices.GetIndexResponse;
 import org.jacob.spring.es2.bean.Book;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,15 +21,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class TestClass {
+public class TestClass2 {
 
-	private static final Logger log = LoggerFactory.getLogger(TestClass.class);
+	private static final Logger log = LoggerFactory.getLogger(TestClass2.class);
 
 	@Resource
 	private ElasticsearchRestTemplate elasticsearchRestTemplate;
 
 	@Resource
 	private RestHighLevelClient highLevelClient;
+
 	// 方法
 	// 删除index
 	@Test
@@ -40,16 +38,16 @@ public class TestClass {
 		boolean b = elasticsearchRestTemplate.deleteIndex("myindex");
 		log.info("========deleteIndex==========={}", b);
 	}
+
 	// 方法
 	// 删除index
 	@Test
 	public void deleteIndex1() throws Exception {
-		GetAliasesRequest request = new GetAliasesRequest();
-		GetAliasesResponse getAliasesResponse = highLevelClient.indices().getAlias(request, RequestOptions.DEFAULT);
-		Map<String, Set<AliasMetaData>> map = getAliasesResponse.getAliases();
-		Set<String> indices = map.keySet();
-		for (String key : indices) {
-			System.out.println(key);
+		GetIndexRequest request = new GetIndexRequest("*");
+		GetIndexResponse response = highLevelClient.indices().get(request, RequestOptions.DEFAULT);
+		String[] indices = response.getIndices();
+		for (String string : indices) {
+			System.err.println(string);
 		}
 	}
 

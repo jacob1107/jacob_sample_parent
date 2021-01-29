@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 
-//@Configuration
+@Configuration
 public class ESConfig {
 
 	@Value("${elastic.host}")
@@ -34,7 +34,7 @@ public class ESConfig {
 		CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
 		credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(userName, password));
 
-		RestClientBuilder builder = RestClient.builder(new HttpHost(host, port)).setHttpClientConfigCallback(
+		RestClientBuilder builder = RestClient.builder(new HttpHost(host, port,"https")).setHttpClientConfigCallback(
 				httpClientBuilder -> httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider));
 
 		return new RestHighLevelClient(builder);

@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.config.ElasticsearchConfigurationSupport;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 
-@Configuration
+//@Configuration
 public class TransportClientConfig extends ElasticsearchConfigurationSupport {
 
 	@Bean
