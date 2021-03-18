@@ -61,6 +61,7 @@
 		<module>jacob_spring_nacos</module>
 		<module>jacob_spring_mybatisplus</module>
     <module>jacob_spring_junit</module>
+    <module>jacob_spring_docker</module>
   </modules>
 	<build>
 		<plugins>
