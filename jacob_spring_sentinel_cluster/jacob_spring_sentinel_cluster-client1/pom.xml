@@ -4,52 +4,50 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.jacob</groupId>
-		<artifactId>jacob_sample_parent</artifactId>
+		<artifactId>jacob_spring_sentinel_cluster</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<artifactId>jacob_spring_sentinel</artifactId>
-	<name>jacob_spring_sentinel</name>
+	<artifactId>jacob_spring_sentinel_cluster-client1</artifactId>
+	<name>jacob_spring_sentinel_cluster-client1</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	<dependencies>
 
-		<!--SpringCloud ailibaba sentinel -->
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.alibaba.cloud</groupId>
 			<artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
 		</dependency>
-		<!-- SpringBoot整合Web组件+actuator -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
+			<artifactId>spring-boot-starter-test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.csp</groupId>
+			<artifactId>sentinel-transport-simple-http</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.alibaba.csp</groupId>
 			<artifactId>sentinel-cluster-client-default</artifactId>
 		</dependency>
-		<!--日常通用jar包配置 -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
+			<groupId>com.alibaba.csp</groupId>
+			<artifactId>sentinel-datasource-nacos</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.6</version>
-		</dependency>
 	</dependencies>
 </project>

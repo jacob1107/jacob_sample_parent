@@ -51,6 +51,7 @@
 		<module>jacob_spring_apollo</module>
 		<module>jacob_spring_log</module>
 		<module>jacob_spring_sentinel</module>
+		<module>jacob_spring_sentinel2</module>
 		<module>jacob_mybatis_generator</module>
 		<module>jacob_spring_es</module>
 		<module>jacob_spring_httpclient</module>
@@ -62,6 +63,7 @@
 		<module>jacob_spring_mybatisplus</module>
     <module>jacob_spring_junit</module>
     <module>jacob_spring_docker</module>
+    <module>jacob_spring_sentinel_cluster</module>
   </modules>
 	<build>
 		<plugins>
