@@ -64,6 +64,7 @@
     <module>jacob_spring_junit</module>
     <module>jacob_spring_docker</module>
     <module>jacob_spring_sentinel_cluster</module>
+    <module>jacob_spring_hibernate</module>
   </modules>
 	<build>
 		<plugins>
