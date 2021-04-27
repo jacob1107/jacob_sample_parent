@@ -1,6 +1,7 @@
 package org.jacob.spring.hibernate.bean;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.jacob.spring.hibernate.enums.YesNoEnum;
 import org.jacob.spring.hibernate.validator.EnumValidator;
@@ -18,10 +19,9 @@ public class Bean {
 	// @NotNull
 	private Man man;
 
-	@Override
-	public String toString() {
-		return "Bean [payable=" + payable + ", man=" + man + "]";
-	}
+	@Valid
+	@NotNull
+	private Dog dog;
 
 	public static void main(String[] args) {
 
@@ -31,5 +31,10 @@ public class Bean {
 		bean.setMan(man);
 		bean.setPayable(1);
 
+	}
+
+	@Override
+	public String toString() {
+		return "Bean [payable=" + payable + ", man=" + man + ", dog=" + dog + "]";
 	}
 }
