@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.jacob</groupId>
+		<artifactId>jacob_sample_parent</artifactId>
+		<version>1.0.0</version>
+	</parent>
+	<artifactId>jacob_spring_sentinel_cluster-apollo</artifactId>
+	<packaging>pom</packaging>
+	<name>jacob_spring_sentinel_cluster-apollo</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<modules>
+		<module>jacob_spring_sentinel_cluster-server-alone.apollo</module>
+		<module>jacob_spring_sentinel_cluster-client1.apollo</module>
+		<module>jacob_spring_sentinel_cluster-client2.apollo</module>
+		<module>jacob_spring_sentinel_cluster-client3.apollo</module>
+	</modules>
+</project>

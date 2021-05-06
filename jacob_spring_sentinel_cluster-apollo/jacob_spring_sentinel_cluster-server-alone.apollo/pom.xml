@@ -4,26 +4,31 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.jacob</groupId>
-		<artifactId>jacob_sample_parent</artifactId>
+		<artifactId>jacob_spring_sentinel_cluster-apollo</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<artifactId>jacob_sample_common</artifactId>
-	<name>jacob_sample_common</name>
+	<artifactId>jacob_spring_sentinel_cluster-server-alone.apollo</artifactId>
+	<name>jacob_spring_sentinel_cluster-server-alone.apollo</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
-
 		<dependency>
-			<groupId>commons-beanutils</groupId>
-			<artifactId>commons-beanutils</artifactId>
-			<version>1.9.3</version>
+			<groupId>com.alibaba.csp</groupId>
+			<artifactId>sentinel-transport-simple-http</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.6</version>
+			<groupId>com.alibaba.csp</groupId>
+			<artifactId>sentinel-cluster-server-default</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.csp</groupId>
+			<artifactId>sentinel-datasource-apollo</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
