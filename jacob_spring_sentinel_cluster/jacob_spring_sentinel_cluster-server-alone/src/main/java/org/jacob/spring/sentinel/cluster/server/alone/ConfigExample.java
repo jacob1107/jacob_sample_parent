@@ -11,7 +11,6 @@ package org.jacob.spring.sentinel.cluster.server.alone;
 
 import java.util.Properties;
 import java.util.concurrent.Executor;
-
 import com.alibaba.nacos.api.NacosFactory;
 import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.config.ConfigService;
@@ -38,7 +37,7 @@ public class ConfigExample {
 		configService.addListener(dataId, group, new Listener() {
 			@Override
 			public void receiveConfigInfo(String configInfo) {
-				System.out.println("recieve:" + configInfo);
+				System.out.println("receive:" + configInfo);
 			}
 
 			@Override
