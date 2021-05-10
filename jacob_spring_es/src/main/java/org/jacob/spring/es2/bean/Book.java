@@ -6,15 +6,15 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-@Document(indexName = "myindex")
+//@Document(indexName = "myindex")
 public class Book implements Serializable {
 
 	private static final long serialVersionUID = -7383152854961716387L;
-	@Field(index = false, type = FieldType.Text)
+	//@Field(index = false, type = FieldType.Text)
 	private String id;
-	@Field(analyzer = "ik_max_word", type = FieldType.Text, store = true, searchAnalyzer = "ik_max_word")
+	//@Field(analyzer = "ik_max_word", type = FieldType.Text, store = true, searchAnalyzer = "ik_max_word")
 	private String name;
-	@Field(analyzer = "ik_max_word", type = FieldType.Text, store = true, searchAnalyzer = "ik_max_word")
+	//@Field(analyzer = "ik_max_word", type = FieldType.Text, store = true, searchAnalyzer = "ik_max_word")
 	private String author;
 
 	public String getId() {

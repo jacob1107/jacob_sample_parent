@@ -55,7 +55,7 @@ public class HttpClient {
 		CloseableHttpClient httpclient = HttpClients.createDefault();
 
 		RequestConfig requestConfig = setrequestConfig();
-		HttpGet httpGet = new HttpGet("http://127.0.0.1:8081/helloworld3");
+		HttpGet httpGet = new HttpGet("http://127.0.0.1:8080/hello");
 		httpGet.setConfig(requestConfig);
 		CloseableHttpResponse response = null;
 
@@ -80,7 +80,7 @@ public class HttpClient {
 	}
 
 	protected static RequestConfig setrequestConfig() {
-		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(1000).setConnectTimeout(1000)
+		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(7000).setConnectTimeout(1000)
 				.setConnectionRequestTimeout(1000).build();
 		return requestConfig;
 	}

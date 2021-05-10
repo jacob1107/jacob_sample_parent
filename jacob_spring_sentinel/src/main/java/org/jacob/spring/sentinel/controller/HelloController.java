@@ -22,11 +22,12 @@ public class HelloController {
 
 		// int i = 1 / 0;
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(50);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		return String.valueOf(Math.random());
+		log.info("sentinel=============================1");
+		return String.valueOf(Math.random())+"sentinel1";
 	}
 
 	public static String helloworld3Handler(BlockException ex) {
