@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 @Data
 public class Product {
-	@javax.persistence.Id
-	private String Id;
-	private String name;
+    @javax.persistence.Id
+    private String Id;
+    private String name;
 }

@@ -1,6 +1,5 @@
 package org.jacob.spring.es2;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
