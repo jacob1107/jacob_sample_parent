@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.IndexOperations;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -56,6 +57,7 @@ public class TestClass {
 	// 创建index
 	@Test
 	public void createIndex() {
+		elasticsearchRestTemplate.indexOps(IndexCoordinates.of("myindex")).delete();
 		boolean b = elasticsearchRestTemplate.createIndex("myindex");
 		log.info("========createIndex==========={}", b);
 	}
@@ -63,6 +65,9 @@ public class TestClass {
 	// 创建mapping
 	@Test
 	public void createMapping() {
+		IndexOperations indexOperations = elasticsearchRestTemplate.indexOps(Book.class);
+		indexOperations.createMapping(Book.class);
+		indexOperations.create();
 		boolean b = elasticsearchRestTemplate.putMapping(Book.class);
 		log.info("========createMapping==========={}", b);
 	}
@@ -70,6 +75,9 @@ public class TestClass {
 	// 查看表字段
 	@Test
 	public void getMapping() {
+
+		Map<String, Object> stringObjectMap = elasticsearchRestTemplate.indexOps(Book.class).getMapping();
+		log.info("==============={}",stringObjectMap);
 		Map<String, Object> mapping = elasticsearchRestTemplate.getMapping(Book.class);
 		log.info("========getMapping==========={}", mapping);
 	}
