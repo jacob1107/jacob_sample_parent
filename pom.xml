@@ -66,6 +66,7 @@
 		<module>jacob_spring_sentinel_cluster</module>
 		<module>jacob_spring_hibernate</module>
 		<module>jacob_spring_sentinel_cluster-apollo</module>
+		<module>jacob_kafka</module>
 	</modules>
 	<build>
 		<plugins>
