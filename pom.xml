@@ -68,6 +68,7 @@
 		<module>jacob_spring_sentinel_cluster-apollo</module>
 		<module>jacob_kafka</module>
 		<module>jacob_rocketmq</module>
+        <module>jacob_spring_completablefuture</module>
     </modules>
 	<build>
 		<plugins>
