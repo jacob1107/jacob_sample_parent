@@ -71,6 +71,7 @@
         <module>jacob_spring_completablefuture</module>
 		<module>jacob_spring_neo4j</module>
 		<module>jacob_spring_redis</module>
+		<module>jacob_spring_tomcat</module>
 	</modules>
 	<build>
 		<plugins>
