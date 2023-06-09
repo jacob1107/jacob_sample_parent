@@ -69,7 +69,9 @@
 		<module>jacob_kafka</module>
 		<module>jacob_rocketmq</module>
         <module>jacob_spring_completablefuture</module>
-    </modules>
+		<module>jacob_spring_neo4j</module>
+		<module>jacob_spring_redis</module>
+	</modules>
 	<build>
 		<plugins>
 			<plugin>

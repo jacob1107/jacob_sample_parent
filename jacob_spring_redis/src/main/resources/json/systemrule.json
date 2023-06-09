@@ -1,0 +1,11 @@
+[
+	{
+		"avgRt": 122,
+		"highestCpuUsage": 102.0,
+		"highestSystemLoad": 116.0,
+		"maxThread": 23,
+		"qps": 2.0,
+		"limitApp": "default",
+		"resource": "say"
+	}
+]

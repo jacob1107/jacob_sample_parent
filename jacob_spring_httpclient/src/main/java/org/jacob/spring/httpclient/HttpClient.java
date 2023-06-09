@@ -2,189 +2,316 @@
 package org.jacob.spring.httpclient;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
+import java.util.concurrent.TimeUnit;
+
+import com.sun.org.apache.bcel.internal.ExceptionConstants;
+import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpRequestRetryHandler;
+import org.apache.http.client.RedirectStrategy;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.ConnectionKeepAliveStrategy;
+import org.apache.http.conn.ConnectionPoolTimeoutException;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultRedirectStrategy;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import com.alibaba.fastjson.JSON;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLHandshakeException;
 
 public class HttpClient {
+    private static final Logger logger = LoggerFactory.getLogger(HttpClient.class);
+    private static CloseableHttpClient httpclientgetString = null;
+    private static CloseableHttpClient httpclientgetStringCloseableHttpClient = null;
+    private static HttpRequestRetryHandler httpRequestRetryHandler = null;
+    private static int RETRY_TIMES = 1;
 
-	public static void main(String[] args) throws Exception {
-		for (int i = 0; i < 700; i++) {
-			new Thread(new Runnable() {
+    static {
+        //连接池
+        PoolingHttpClientConnectionManager poolingHttpClientConnectionManager = new PoolingHttpClientConnectionManager();
+        //默认2
+        poolingHttpClientConnectionManager.setDefaultMaxPerRoute(7);
+        //默认20
+        poolingHttpClientConnectionManager.setMaxTotal(9);
 
-				@Override
-				public void run() {
-					httpClient();
+        //返true重试，false不重试
+        httpRequestRetryHandler = new HttpRequestRetryHandler() {
+            @Override
+            public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
+                logger.info("exec========={}", executionCount);
+                System.err.println("exec=========" + executionCount);
+                if (executionCount >= RETRY_TIMES) {
+                    return false;
+                }
+                if (exception instanceof ConnectTimeoutException) { //连接超时,重试
+                    return true;
+                }
+                if (exception instanceof SocketTimeoutException) {//读取超时,重试
+                    return true;
+                }
+                if (exception instanceof NoHttpResponseException) {//没有响应 ,重试
+                    return true;
+                }
+                if (exception instanceof UnknownHostException) {//找不到服务器
+                    return true;
+                }
+                if (exception instanceof InterruptedIOException) {//被中断
+                    return true;
+                }
+                if (exception instanceof SSLHandshakeException) {//本地证书异常
+                    return true;
+                }
+                if (exception instanceof SSLException) {//SSL 异常
+                    return true;
+                }
+                return false;
+            }
+        };
+        httpclientgetString = HttpClientBuilder.create().setKeepAliveStrategy(new ConnectionKeepAliveStrategy() {
+            @Override
+            //设置客户端keep-alive 单位ms;默认60s 即60000
+            public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
+                return 1100;
+            }
+        }).setConnectionManagerShared(true).setConnectionManager(poolingHttpClientConnectionManager).setRetryHandler(httpRequestRetryHandler).build();
 
-				}
-			}).start();
+        httpclientgetStringCloseableHttpClient = HttpClientBuilder.create().setConnectionManagerShared(true).evictIdleConnections(1100, TimeUnit.MICROSECONDS).build();
 
-		}
-	}
 
-	private static void httpClient() {
-		// getString();
-		post();
+    }
 
-	}
+    public static void main(String[] args) throws Exception {
+        for (int i = 0; i < 700; i++) {
+            new Thread(new Runnable() {
 
-	/**
-	 * HttpClinet 一定要设置成单例
-	 * connectionRequestTimout：指从连接池获取连接的timeout
-	 * connetionTimeout：指客户端和服务器建立连接的timeout，
-	 * 就是http请求的三个阶段，一：建立连接；二：数据传送；三，断开连接。超时后会ConnectionTimeOutException
-	 * socketTimeout：指客户端从服务器读取数据的timeout，超出后会抛出SocketTimeOutException
-	 */
-	protected static void getString() {
-		CloseableHttpClient httpclient = HttpClients.createDefault();
+                @Override
+                public void run() {
+                    httpClient();
 
-		RequestConfig requestConfig = setrequestConfig();
-		HttpGet httpGet = new HttpGet("http://127.0.0.1:8080/hello");
-		httpGet.setConfig(requestConfig);
-		CloseableHttpResponse response = null;
+                }
+            }).start();
 
-		try {
-			response = httpclient.execute(httpGet);
-			System.out.println(response.getStatusLine());
-			HttpEntity entity1 = response.getEntity();
-			System.err.println(EntityUtils.toString(entity1));
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				response.close();
-				httpclient.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+        }
 
-	}
 
-	protected static RequestConfig setrequestConfig() {
-		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(7000).setConnectTimeout(1000)
-				.setConnectionRequestTimeout(1000).build();
-		return requestConfig;
-	}
+        int s = 2;
+        for (int i = 0; i < s; i++) {
+            try {
+                // getString();
+                postJson();
+                //getStringCloseableHttpClient();
+                TimeUnit.MILLISECONDS.sleep(1000);
+            } catch (Exception e) {
 
-	protected static void getString2() {
-		CloseableHttpClient httpclient = HttpClients.createDefault();
+            }
 
-		RequestConfig requestConfig = setrequestConfig();
-		CloseableHttpResponse response = null;
-		try {
-			URIBuilder uriBuilder = new URIBuilder("http://127.0.0.1:8081/helloworld3");
-			// 第一种
-			uriBuilder.addParameter("name", "name");
-			uriBuilder.addParameter("password", "password");
+        }
+    }
 
-			// 第二种
-			List<NameValuePair> nvps = new ArrayList<>();
-			NameValuePair nameValuePair = new BasicNameValuePair("name", "name");
-			NameValuePair nameValuePair2 = new BasicNameValuePair("password", "password");
-			nvps.add(nameValuePair2);
-			nvps.add(nameValuePair);
-			uriBuilder.addParameters(nvps);
+    private static void httpClient() {
+        // getString();
+        post();
 
-			HttpGet httpGet = new HttpGet(uriBuilder.build());
-			httpGet.setConfig(requestConfig);
-			response = httpclient.execute(httpGet);
-			System.out.println(response.getStatusLine());
-			HttpEntity entity1 = response.getEntity();
-			System.err.println(EntityUtils.toString(entity1));
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				response.close();
-				httpclient.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+    }
 
-	}
+    /**
+     * HttpClinet 一定要设置成单例
+     * connectionRequestTimout：指从连接池获取连接的timeout
+     * connetionTimeout：指客户端和服务器建立连接的timeout，
+     * 就是http请求的三个阶段，一：建立连接；二：数据传送；三，断开连接。超时后会ConnectionTimeOutException
+     * socketTimeout：指客户端从服务器读取数据的timeout，超出后会抛出SocketTimeOutException
+     */
+    protected static void getString() {
+        //CloseableHttpClient httpclient = HttpClients.createDefault();
+        // CloseableHttpClient httpclient = HttpClientBuilder.create().setConnectionManagerShared(false).evictIdleConnections(55, TimeUnit.SECONDS).build();
 
-	protected static void post() {
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-		// RequestConfig requestConfig = setrequestConfig();
-		HttpPost httpPost = new HttpPost("http://127.0.0.1:8081/say");
-		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-		nvps.add(new BasicNameValuePair("servName", "app"));
-		nvps.add(new BasicNameValuePair("name", "age"));
-		nvps.add(new BasicNameValuePair("sex", "sex"));
-		nvps.add(new BasicNameValuePair("age", "1"));
-		CloseableHttpResponse response = null;
-		try {
-			// httpPost.setConfig(requestConfig);
-			httpPost.setEntity(new UrlEncodedFormEntity(nvps));
-			response = httpclient.execute(httpPost);
-			System.out.println(response.getStatusLine());
-			HttpEntity entity2 = response.getEntity();
-			System.err.println(EntityUtils.toString(entity2));
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				response.close();
-				httpclient.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
 
-	protected static void postJson() {
-		CloseableHttpClient httpclient = HttpClients.createDefault();
-		RequestConfig requestConfig = setrequestConfig();
+        RequestConfig requestConfig = setrequestConfig();
+        HttpGet httpGet = new HttpGet("http://127.0.0.1:8080/hello");
+        httpGet.setConfig(requestConfig);
+        CloseableHttpResponse response = null;
 
-		HttpPost httpPost = new HttpPost("http://127.0.0.1:8081/helloworld3");
-		Map<String, String> map = new HashMap<>();
-		map.put("username", "vip");
-		map.put("password", "secret");
+        try {
+            response = httpclientgetString.execute(httpGet);
+            System.out.println(response.getStatusLine());
+            HttpEntity entity1 = response.getEntity();
+            System.err.println(EntityUtils.toString(entity1));
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                response.close();
+                httpclientgetString.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
-		String jsonString = JSON.toJSONString(map);
-		CloseableHttpResponse response = null;
-		try {
-			StringEntity stringEntity = new StringEntity(jsonString);
-			stringEntity.setContentEncoding("UTF-8");
-			stringEntity.setContentType("application/json");
-			httpPost.setEntity(stringEntity);
-			httpPost.setConfig(requestConfig);
-			response = httpclient.execute(httpPost);
-			System.out.println(response.getStatusLine());
-			HttpEntity entity2 = response.getEntity();
-			System.err.println(EntityUtils.toString(entity2));
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				response.close();
-				httpclient.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+    }
+
+    protected static void getStringCloseableHttpClient() {
+        //CloseableHttpClient httpclient = HttpClients.createDefault();
+        //CloseableHttpClient httpclientgetStringCloseableHttpClient = HttpClientBuilder.create().setConnectionManagerShared(false).evictIdleConnections(2, TimeUnit.SECONDS).build();
+
+
+        RequestConfig requestConfig = setrequestConfig();
+        HttpGet httpGet = new HttpGet("http://127.0.0.1:8080/hello");
+        httpGet.setConfig(requestConfig);
+        CloseableHttpResponse response = null;
+
+        try {
+            response = httpclientgetStringCloseableHttpClient.execute(httpGet);
+            System.out.println(response.getStatusLine());
+            HttpEntity entity1 = response.getEntity();
+            System.err.println(EntityUtils.toString(entity1));
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (null != response)
+                    response.close();
+                httpclientgetStringCloseableHttpClient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    protected static RequestConfig setrequestConfig() {
+        RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(7000).setConnectTimeout(1000)
+                .setConnectionRequestTimeout(1000).build();
+        return requestConfig;
+    }
+
+    protected static void getString2() {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+
+        RequestConfig requestConfig = setrequestConfig();
+        CloseableHttpResponse response = null;
+        try {
+            URIBuilder uriBuilder = new URIBuilder("http://127.0.0.1:8081/helloworld3");
+            // 第一种
+            uriBuilder.addParameter("name", "name");
+            uriBuilder.addParameter("password", "password");
+
+            // 第二种
+            List<NameValuePair> nvps = new ArrayList<>();
+            NameValuePair nameValuePair = new BasicNameValuePair("name", "name");
+            NameValuePair nameValuePair2 = new BasicNameValuePair("password", "password");
+            nvps.add(nameValuePair2);
+            nvps.add(nameValuePair);
+            uriBuilder.addParameters(nvps);
+
+            HttpGet httpGet = new HttpGet(uriBuilder.build());
+            httpGet.setConfig(requestConfig);
+            response = httpclient.execute(httpGet);
+            System.out.println(response.getStatusLine());
+            HttpEntity entity1 = response.getEntity();
+            System.err.println(EntityUtils.toString(entity1));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                response.close();
+                httpclient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    protected static void post() {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        // RequestConfig requestConfig = setrequestConfig();
+        HttpPost httpPost = new HttpPost("http://127.0.0.1:8081/say");
+        List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+        nvps.add(new BasicNameValuePair("servName", "app"));
+        nvps.add(new BasicNameValuePair("name", "age"));
+        nvps.add(new BasicNameValuePair("sex", "sex"));
+        nvps.add(new BasicNameValuePair("age", "1"));
+        CloseableHttpResponse response = null;
+        try {
+            // httpPost.setConfig(requestConfig);
+            httpPost.setEntity(new UrlEncodedFormEntity(nvps));
+            response = httpclient.execute(httpPost);
+            System.out.println(response.getStatusLine());
+            HttpEntity entity2 = response.getEntity();
+            System.err.println(EntityUtils.toString(entity2));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                response.close();
+                httpclient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected static void postJson() {
+        //CloseableHttpClient httpclient = HttpClients.createDefault();
+        RequestConfig requestConfig = setrequestConfig();
+
+        //HttpPost httpPost = new HttpPost("http://127.0.0.1:8080/hello");
+        HttpPost httpPost = new HttpPost("http://www.baidu.com");
+        Map<String, String> map = new HashMap<>();
+        map.put("username", "vip");
+        map.put("password", "secret");
+
+        String jsonString = JSON.toJSONString(map);
+        CloseableHttpResponse response = null;
+        try {
+            StringEntity stringEntity = new StringEntity(jsonString);
+            stringEntity.setContentEncoding("UTF-8");
+            stringEntity.setContentType("application/json");
+            httpPost.setEntity(stringEntity);
+            httpPost.setConfig(requestConfig);
+            response = httpclientgetString.execute(httpPost);
+            System.out.println(response.getStatusLine());
+            HttpEntity entity2 = response.getEntity();
+            System.err.println(EntityUtils.toString(entity2));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                response.close();
+                httpclientgetString.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }
