@@ -1,4 +1,4 @@
-package org.jacob.spring.sentinel;
+package org.jacob.spring.redis;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
