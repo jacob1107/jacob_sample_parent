@@ -51,6 +51,7 @@
 		<module>jacob_lombok</module>
 		<module>jacob_spring_apollo</module>
 		<module>jacob_spring_log</module>
+		<module>jacob_spring_filter</module>
 		<module>jacob_spring_sentinel</module>
 		<module>jacob_mybatis_generator</module>
 		<module>jacob_spring_es</module>
