@@ -8,11 +8,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Date 2024/1/11 11:08
  * @Version 1.0
  */
-@SpringBootApplication(proxyBeanMethods = false)
-public class MyApplication {
+//@SpringBootApplication(proxyBeanMethods = false)
+@SpringBootApplication
+public class FlowableApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MyApplication.class, args);
+        SpringApplication.run(FlowableApplication.class, args);
     }
 
 
