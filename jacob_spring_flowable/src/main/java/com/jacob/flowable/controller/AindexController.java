@@ -1,4 +1,4 @@
-package org.jacob.spring.flowable;
+package com.jacob.flowable.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

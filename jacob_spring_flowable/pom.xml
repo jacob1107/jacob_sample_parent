@@ -27,7 +27,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-
+        <!--请将liquibase版本升到最新版，而不是使用springboot默认指定的旧版本，我一指定就可以启动成功，用旧版本就不行-->
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <!--指定最新版，当前我这边是4.12.0-->
+            <version>4.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
         <dependency>
             <groupId>org.flowable</groupId>
             <artifactId>flowable-spring-boot-starter-actuator</artifactId>
@@ -45,6 +56,12 @@
             <groupId>org.flowable</groupId>
             <artifactId>flowable-spring-boot-starter</artifactId>
             <version>${flowable.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>liquibase-core</artifactId>
+                    <groupId>org.liquibase</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!--flowable工作流依赖 end -->
 
@@ -77,14 +94,15 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.5.9</version>
-        </dependency>
-        <dependency>
             <groupId>org.flowable</groupId>
             <artifactId>flowable-engine</artifactId>
             <version>${flowable.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>liquibase-core</artifactId>
+                    <groupId>org.liquibase</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
