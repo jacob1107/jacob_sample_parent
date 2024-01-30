@@ -23,17 +23,23 @@ import java.util.Map;
 @RequestMapping("/expense")
 public class FlowableController {
     private static final Logger logger = LoggerFactory.getLogger(FlowableController.class);
-    @Autowired
+    // @Autowired
     private RuntimeService runtimeService;
-    @Autowired
+    // @Autowired
     private TaskService taskService;
-    @Autowired
+    // @Autowired
     private RepositoryService repositoryService;
 
-    @Qualifier("processEngine")
-    @Autowired
+    //@Qualifier("processEngine")
+    //@Autowired
     private ProcessEngine processEngine;
 
+    public FlowableController(@Qualifier("processEngine") ProcessEngine processEngine) {
+        this.processEngine = processEngine;
+        this.runtimeService = processEngine.getRuntimeService();
+        this.taskService = processEngine.getTaskService();
+        this.repositoryService = processEngine.getRepositoryService();
+    }
 
     /**
      * 查询流程列表，待办列表，通过代码获取出用户需要处理的流程
@@ -41,7 +47,7 @@ public class FlowableController {
      */
     @RequestMapping("/list")
     public Object list(String userId) {
-        List<Task> tasks = taskService.createTaskQuery().taskAssignee(userId).orderByTaskCreateTime().desc().list();
+        List<Task> tasks = processEngine.getTaskService().createTaskQuery().taskAssignee(userId).orderByTaskCreateTime().desc().list();
         for (Task task : tasks) {
             System.out.println(task.toString());
         }
