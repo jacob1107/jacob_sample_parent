@@ -30,7 +30,7 @@ public class FlowableTest {
     @Qualifier("processEngine")
     @Autowired
     private ProcessEngine processEngine;
-    
+
     @Test
     public void processEngine() {
         RepositoryService repositoryService = processEngine.getRepositoryService();

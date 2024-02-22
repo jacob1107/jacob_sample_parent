@@ -55,6 +55,7 @@
 		<module>jacob_spring_sentinel</module>
 		<module>jacob_mybatis_generator</module>
 		<module>jacob_spring_es</module>
+		<module>jacob_spring_k8s</module>
 		<module>jacob_spring_httpclient</module>
 		<module>jacob_springcloud_gateway_services</module>
 		<module>jacob_springcloud_gateway_client</module>
