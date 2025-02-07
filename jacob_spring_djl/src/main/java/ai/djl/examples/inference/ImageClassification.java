@@ -30,9 +30,13 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * An example of inference using an image classification model.
@@ -45,10 +49,14 @@ public final class ImageClassification {
 
     private static final Logger logger = LoggerFactory.getLogger(ImageClassification.class);
 
-    private ImageClassification() {}
+    private ImageClassification() {
+    }
 
     public static void main(String[] args) throws IOException, ModelException, TranslateException {
         Classifications classifications = ImageClassification.predict();
+        List<Classifications.Classification> items = null != classifications.items() ? classifications.items() : new ArrayList<>();
+        Classifications.Classification classification = items.stream().max(Comparator.comparing(Classifications.Classification::getProbability)).get();
+        logger.info("max======{}", classification);
         logger.info("{}", classifications);
     }
 
@@ -58,7 +66,7 @@ public final class ImageClassification {
 
         String modelName = "mlp";
         try (Model model = Model.newInstance(modelName)) {
-            model.setBlock(new Mlp(28 * 28, 10, new int[] {128, 64}));
+            model.setBlock(new Mlp(28 * 28, 10, new int[]{128, 64}));
 
             // Assume you have run TrainMnist.java example, and saved model in build/model folder.
             Path modelDir = Paths.get("build/model");
