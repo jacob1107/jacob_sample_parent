@@ -16,6 +16,7 @@ import ai.djl.Application;
 import ai.djl.ModelException;
 import ai.djl.engine.Engine;
 import ai.djl.inference.Predictor;
+import ai.djl.modality.Classifications;
 import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.ImageFactory;
 import ai.djl.modality.cv.output.DetectedObjects;
@@ -31,8 +32,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Comparator;
 
 /**
+ * 对象检测
  * An example of inference using an object detection model.
  *
  * <p>See this <a
@@ -43,15 +46,20 @@ public final class ObjectDetection {
 
     private static final Logger logger = LoggerFactory.getLogger(ObjectDetection.class);
 
-    private ObjectDetection() {}
+    private ObjectDetection() {
+    }
 
     public static void main(String[] args) throws IOException, ModelException, TranslateException {
         DetectedObjects detection = ObjectDetection.predict();
         logger.info("{}", detection);
+
+       /* Classifications.Classification classification = detection.items().stream().max(Comparator.comparing(Classifications.Classification::getProbability)).get();
+        logger.info("max======{}", classification);*/
     }
 
     public static DetectedObjects predict() throws IOException, ModelException, TranslateException {
         Path imageFile = Paths.get("src/test/resources/dog_bike_car.jpg");
+        //  Path imageFile = Paths.get("src/test/resources/dog-cat.jpg");
         Image img = ImageFactory.getInstance().fromFile(imageFile);
 
         String backbone;
