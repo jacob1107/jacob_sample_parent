@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: springboot-leader-worker-service
+  namespace: lws-demo
+  labels:
+    app: springboot-leader-worker
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: springboot-leader-worker
+  type: ClusterIP
+  sessionAffinity: None
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: springboot-leader-service
+  namespace: lws-demo
+  labels:
+    app: springboot-leader-worker
+    role: leader
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: springboot-leader-worker
+    role: leader
+  type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: springboot-worker-service
+  namespace: lws-demo
+  labels:
+    app: springboot-leader-worker
+    role: worker
+spec:
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: springboot-leader-worker
+    role: worker
+  type: ClusterIP
+---
+# Headless Service for StatefulSet-like DNS
+apiVersion: v1
+kind: Service
+metadata:
+  name: springboot-leader-worker-headless
+  namespace: lws-demo
+  labels:
+    app: springboot-leader-worker
+spec:
+  clusterIP: "None"
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: springboot-leader-worker
+  publishNotReadyAddresses: true

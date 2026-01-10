@@ -1,0 +1,170 @@
+apiVersion: v1
+items:
+- apiVersion: leaderworkerset.x-k8s.io/v1
+  kind: LeaderWorkerSet
+  metadata:
+    annotations:
+    creationTimestamp: "2025-12-31T08:26:32Z"
+    generation: 1
+    name: leader-worker-demo-java
+    namespace: lws-demo
+    resourceVersion: "40618"
+    uid: 8c55e0d8-c538-4dd2-9501-dad9e39792d5
+  spec:
+    leaderWorkerTemplate:
+      leaderTemplate:
+        metadata:
+          labels:
+            role: leader
+            app: springboot-leader-worker
+        spec:
+          containers:
+          - env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: ROLE
+              value: leader
+            image: leader-worker-demo:1.0.0
+            imagePullPolicy: IfNotPresent
+            livenessProbe:
+              failureThreshold: 3
+              httpGet:
+                path: /actuator/health
+                port: 8080
+                scheme: HTTP
+              initialDelaySeconds: 30
+              periodSeconds: 10
+              timeoutSeconds: 5
+            name: springboot-app-leader
+            ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+            readinessProbe:
+              failureThreshold: 1
+              httpGet:
+                path: /actuator/health
+                port: 8080
+                scheme: HTTP
+              initialDelaySeconds: 20
+              periodSeconds: 5
+              timeoutSeconds: 3
+            resources:
+              limits:
+                cpu: 500m
+                memory: 1Gi
+              requests:
+                cpu: 250m
+                memory: 512Mi
+            startupProbe:
+              failureThreshold: 30
+              httpGet:
+                path: /actuator/health
+                port: 8080
+                scheme: HTTP
+              initialDelaySeconds: 10
+              periodSeconds: 5
+      restartPolicy: RecreateGroupOnPodRestart
+      size: 2
+      workerTemplate:
+        metadata:
+          labels:
+            role: worker
+            app: springboot-leader-worker
+        spec:
+          containers:
+          - env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: ROLE
+              value: worker
+            image: leader-worker-demo:1.0.0
+            imagePullPolicy: IfNotPresent
+            livenessProbe:
+              failureThreshold: 3
+              httpGet:
+                path: /actuator/health
+                port: 8080
+                scheme: HTTP
+              initialDelaySeconds: 30
+              periodSeconds: 10
+              timeoutSeconds: 5
+            name: springboot-app-worker
+            ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+            readinessProbe:
+              failureThreshold: 1
+              httpGet:
+                path: /actuator/health
+                port: 8080
+                scheme: HTTP
+              initialDelaySeconds: 20
+              periodSeconds: 5
+              timeoutSeconds: 3
+            resources:
+              limits:
+                cpu: 500m
+                memory: 1Gi
+              requests:
+                cpu: 250m
+                memory: 512Mi
+            startupProbe:
+              failureThreshold: 30
+              httpGet:
+                path: /actuator/health
+                port: 8080
+                scheme: HTTP
+              initialDelaySeconds: 10
+              periodSeconds: 5
+    networkConfig:
+      subdomainPolicy: Shared
+    replicas: 2
+    rolloutStrategy:
+      rollingUpdateConfiguration:
+        maxSurge: 2
+        maxUnavailable: 2
+      type: RollingUpdate
+    startupPolicy: LeaderCreated
+  status:
+    conditions:
+    - lastTransitionTime: "2025-12-31T08:26:32Z"
+      message: Replicas are progressing
+      reason: GroupsProgressing
+      status: "True"
+      type: Progressing
+    hpaPodSelector: leaderworkerset.sigs.k8s.io/name=vllm,leaderworkerset.sigs.k8s.io/worker-index=0
+    replicas: 2
+    updatedReplicas: 2
+kind: List
+metadata:
+  resourceVersion: ""
