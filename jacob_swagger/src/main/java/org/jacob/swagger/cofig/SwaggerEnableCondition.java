@@ -1,4 +1,4 @@
-package org.jacob.lws.cofig;
+package org.jacob.swagger.cofig;
 
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;

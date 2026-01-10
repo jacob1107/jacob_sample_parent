@@ -1,4 +1,4 @@
-package org.jacob.lws.controller;
+package org.jacob.swagger.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
